@@ -54,10 +54,21 @@ resource "aws_ssoadmin_permission_set" "this" {
   tags             = lookup(each.value, "tags", {})
 }
 
-resource "aws_ssoadmin_permission_set_inline_policy" "this" {
-  for_each = { for ps_name, ps_attrs in var.permission_sets : ps_name => ps_attrs if can(ps_attrs.inline_policy) }
+data "aws_iam_policy_document" "inline_policy" {
+  for_each = { for ps_name, ps_attrs in var.permission_sets : ps_name => ps_attrs if can(ps_attrs.inline_policy) && ps_attrs.inline_policy != null }
 
-  inline_policy      = each.value.inline_policy
+  statement {
+    sid = each.value.inline_policy.sid
+    actions = each.value.inline_policy.actions
+    resources = each.value.inline_policy.resources
+  }
+}
+
+resource "aws_ssoadmin_permission_set_inline_policy" "this" {
+  depends_on = [data.aws_iam_policy_document.inline_policy]
+  for_each = { for ps_name, ps_attrs in var.permission_sets : ps_name => ps_attrs if can(ps_attrs.inline_policy) && ps_attrs.inline_policy != null}
+
+  inline_policy      = data.aws_iam_policy_document.inline_policy[each.key].json
   instance_arn       = local.ssoadmin_instance_arn
   permission_set_arn = aws_ssoadmin_permission_set.this[each.key].arn
 }

@@ -7,6 +7,16 @@ variable "permission_sets" {
       session_duration = "PT2H",
       managed_policies = ["arn:aws:iam::aws:policy/AdministratorAccess"]
     }
+    ViewOnlyAccess = {
+      description      = "View resources and basic metadata across all AWS services. Additionaly allow SSM get parameter",
+      session_duration = "PT12H",
+      managed_policies = ["arn:aws:iam::aws:policy/job-function/ViewOnlyAccess"]
+      inline_policy: {
+        sid =  "SSMGetParameterAccess"
+        actions =  ["ssm:GetParameter*"]
+        resources = ["*"]
+      }
+    }
   }
 }
 
