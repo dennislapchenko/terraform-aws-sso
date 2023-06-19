@@ -1,5 +1,5 @@
 # AWS SSO Terraform module
-![GitHub tag (latest by date)](https://img.shields.io/github/v/tag/avlcloudtechnologies/terraform-aws-sso)
+![GitHub tag (latest by date)](https://img.shields.io/github/v/tag/dennislapchenko/terraform-aws-sso)
 
 This module handles creation of AWS SSO permission sets and assignment to AWS SSO entities and AWS Accounts.
 
@@ -11,12 +11,12 @@ Before this module can be used, please ensure that the following pre-requisites 
 - Ensure that Terraform is using a role with permissions required for AWS SSO management. [Documentation](https://docs.aws.amazon.com/singlesignon/latest/userguide/iam-auth-access-using-id-policies.html#requiredpermissionsconsole).
 
 ## Usage
-More complex examples can be found in the [examples](https://github.com/avlcloudtechnologies/terraform-aws-sso/tree/master/examples) directory. Simple use case:
+More complex examples can be found in the [examples](https://github.com/dennislapchenko/terraform-aws-sso/tree/master/examples) directory. Simple use case:
 
 
 ```hcl
 module "sso" {
-  source  = "avlcloudtechnologies/sso/aws"
+  source  = "dennislapchenko/sso/aws"
 
   permission_sets = {
     AdministratorAccess = {
